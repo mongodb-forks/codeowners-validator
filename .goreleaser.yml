@@ -5,7 +5,6 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - darwin
       - windows
     goarch:
       - amd64
@@ -20,6 +19,16 @@ builds:
     hooks:
       # Install upx first, https://github.com/upx/upx/releases
       post: upx -9 "{{ .Path }}"
+  - id: codeowners-validator-no-upx
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X go.szostok.io/version.version={{.Version}} -X go.szostok.io/version.buildDate={{.Date}}
 
 archives:
   - name_template: >-
