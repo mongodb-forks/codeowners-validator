@@ -1,3 +1,4 @@
+version: 2
 builds:
   - id: codeowners-validator
     env:
@@ -22,28 +23,29 @@ builds:
       post: upx -9 "{{ .Path }}"
 
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+  - name_template: >-
+      {{- .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
     format_overrides:
       - goos: windows
         format: zip
 
-dockers:
-  - dockerfile: Dockerfile
-    ids:
-      - codeowners-validator
-    image_templates:
-      - "ghcr.io/mszostok/codeowners-validator:stable"
-      - "ghcr.io/mszostok/codeowners-validator:{{ .Tag }}"
-      - "ghcr.io/mszostok/codeowners-validator:v{{ .Major }}.{{ .Minor }}"
-      - "ghcr.io/mszostok/codeowners-validator:v{{ .Major }}"
-      - "mszostok/codeowners-validator:latest"
-      - "mszostok/codeowners-validator:{{ .Tag }}"
-      - "mszostok/codeowners-validator:v{{ .Major }}.{{ .Minor }}"
+# dockers:
+#   - dockerfile: Dockerfile
+#     ids:
+#       - codeowners-validator
+#     image_templates:
+#       - "ghcr.io/mszostok/codeowners-validator:stable"
+#       - "ghcr.io/mszostok/codeowners-validator:{{ .Tag }}"
+#       - "ghcr.io/mszostok/codeowners-validator:v{{ .Major }}.{{ .Minor }}"
+#       - "ghcr.io/mszostok/codeowners-validator:v{{ .Major }}"
+#       - "mszostok/codeowners-validator:latest"
+#       - "mszostok/codeowners-validator:{{ .Tag }}"
+#       - "mszostok/codeowners-validator:v{{ .Major }}.{{ .Minor }}"
 
 checksum:
   name_template: 'checksums.txt'
@@ -67,19 +69,19 @@ release:
   # Repo in which the release will be created.
   # Default is extracted from the origin remote URL or empty if its private hosted.
   github:
-    owner: mszostok
+    owner: mongodb-forks
     name: codeowners-validator
 
-brews:
-  - name: codeowners-validator
-    homepage: https://github.com/mszostok/codeowners-validator
-    description: Ensures the correctness of your CODEOWNERS file.
-    license: "Apache License 2.0"
-    tap:
-      owner: mszostok
-      name: homebrew-tap
-    commit_author:
-      name: Mateusz Szostok
-      email: szostok.mateusz@gmail.com
-    test: |
-      system "#{bin}/codeowners-validator -v --short"
+# brews:
+#   - name: codeowners-validator
+#     homepage: https://github.com/mszostok/codeowners-validator
+#     description: Ensures the correctness of your CODEOWNERS file.
+#     license: "Apache License 2.0"
+#     tap:
+#       owner: mszostok
+#       name: homebrew-tap
+#     commit_author:
+#       name: Mateusz Szostok
+#       email: szostok.mateusz@gmail.com
+#     test: |
+#       system "#{bin}/codeowners-validator -v --short"
