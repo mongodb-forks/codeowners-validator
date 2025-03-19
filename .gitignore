@@ -5,3 +5,4 @@ dist/
 tmp/
 bin/
 coverage.txt
+.vscode

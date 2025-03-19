@@ -22,16 +22,16 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
-      - name: Install upx 3.96
+      - name: Install upx 4.2.4
         run: |
-          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
+          wget https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-amd64_linux.tar.xz
 
           # --strip-components=number - Strip given number of leading components from file names before extraction.
-          # and extract only ./upx-3.96-amd64_linux/upx file
-          tar --strip-components 1 -xf upx-3.96-amd64_linux.tar.xz upx-3.96-amd64_linux/upx
+          # and extract only ./upx-4.2.4-amd64_linux/upx file
+          tar --strip-components 1 -xf upx-4.2.4-amd64_linux.tar.xz upx-4.2.4-amd64_linux/upx
 
           mv ./upx /usr/local/bin/upx
-          rm upx-3.96-amd64_linux.tar.xz
+          rm upx-4.2.4-amd64_linux.tar.xz
           upx -V
       - name: GHCR Login
         uses: docker/login-action@v3
